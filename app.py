@@ -6,15 +6,11 @@ from treeinterpreter import treeinterpreter as ti
 from sklearn.metrics import r2_score, mean_absolute_error, mean_absolute_percentage_error
 import os
 
-# -----------------------------
-# Load model and training data
-# -----------------------------
+# load model and data
 model = joblib.load("model/resting_bpm_model.joblib")
 cols = pd.read_csv("model/columns.csv").iloc[:, 0].tolist()
 
-# -----------------------------
-# Explainers
-# -----------------------------
+# crew ai
 def explain(pred, top_features, top_contributions):
     explanation = "### Crew-AI Analysis Report\n"
     explanation += (
@@ -38,9 +34,7 @@ def explain_model_performance(r2, mae, mape):
     explanation += f"- **MAPE = {mape*100:.2f}%**: Average percent error.\n\n"
     return explanation
 
-# -----------------------------
-# Prediction function
-# -----------------------------
+#prediction 
 def predict_resting_bpm(input_dict):
     df_input = pd.DataFrame([input_dict])
     bool_cols = df_input.select_dtypes(include='bool').columns
@@ -60,26 +54,22 @@ def predict_resting_bpm(input_dict):
 
     return {"predicted_bpm": pred, "top_features": short_explanation, "verbose": verbose_explanation}
 
-# -----------------------------
-# UI - Main
-# -----------------------------
+# ui
 st.title("Resting Heart Rate Predictor")
 st.write("Enter your health variables to predict your resting heart rate.")
 
-# -----------------------------
-# Sidebar - Utilities
-# -----------------------------
+# sidebar
 st.sidebar.header("Utility Calculators")
-# Gallons → Liters
+# gallons → liters
 gallons = st.sidebar.number_input("Gallons → Liters", min_value=0.0, step=0.1)
 st.sidebar.write(f"Liters: **{gallons * 3.785:.3f}**")
-# Pounds → Kilograms
+# lbs → kg
 lbs = st.sidebar.number_input("Pounds → Kilograms", min_value=0.0, step=0.1)
 st.sidebar.write(f"Kilograms: **{lbs * 0.453592:.3f}**")
-# Inches → Meters
+# in → m
 inches = st.sidebar.number_input("Inches → Meters", min_value=0.0, step=0.1)
 st.sidebar.write(f"Meters: **{inches * 0.0254:.3f}**")
-# BMI Calculator
+# BMI calc
 st.sidebar.subheader("BMI Calculator")
 kg = st.sidebar.number_input("Weight (kg)", min_value=0.0)
 m = st.sidebar.number_input("Height (m)", min_value=0.0)
@@ -87,7 +77,7 @@ if m > 0:
     bmi = kg / (m ** 2)
     st.sidebar.write(f"**BMI:** {bmi:.2f}")
 
-# Model Performance Metrics
+# performance metrics
 st.sidebar.header("Model Performance")
 if os.path.exists("test_data.csv") and os.path.exists("test_labels.csv"):
     X_test = pd.read_csv("test_data.csv")
@@ -105,9 +95,7 @@ if os.path.exists("test_data.csv") and os.path.exists("test_labels.csv"):
 else:
     st.sidebar.write("Test data unavailable. Metrics cannot be computed.")
 
-# -----------------------------
-# User Input
-# -----------------------------
+#input
 user_input = {}
 st.subheader("Input Your Variables")
 for col in cols:
@@ -116,9 +104,7 @@ for col in cols:
     else:
         user_input[col] = st.number_input(col, value=0.0)
 
-# -----------------------------
-# Prediction Button
-# -----------------------------
+# prediction button 
 if st.button("Predict"):
     result = predict_resting_bpm(user_input)
     st.session_state["prediction_result"] = result
@@ -126,9 +112,7 @@ if st.button("Predict"):
     st.info(f"**Top Contributing Features:** {result['top_features']}")
     st.write(result["verbose"])
 
-# -----------------------------
-# Enhanced Feedback System
-# -----------------------------
+# human in the loop system 
 st.header("Help Improve the Model")
 st.write("Provide feedback so we can improve future predictions.")
 
@@ -163,7 +147,6 @@ if result:
                 })
                 feedback_df = pd.DataFrame([feedback_entry])
 
-                # Drop mismatched columns if CSV exists
                 if os.path.exists(feedback_file):
                     existing_df = pd.read_csv(feedback_file)
                     feedback_df = feedback_df[[c for c in feedback_df.columns if c in existing_df.columns]]
@@ -171,6 +154,6 @@ if result:
                 else:
                     feedback_df.to_csv(feedback_file, index=False)
 
-                st.success("✅ Thank you! Your feedback has been recorded.")
+                st.success("Thank you! Your feedback has been recorded.")
 else:
     st.info("Please make a prediction first to provide feedback.")
