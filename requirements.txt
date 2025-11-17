@@ -1,0 +1,20 @@
+conda create -n RestingHeartRate python=3.10 -y
+conda activate RestingHeartRate
+conda install -c conda-forge \
+  numpy \
+  pandas \
+  matplotlib \
+  seaborn \
+  scikit-learn \
+  joblib \
+  streamlit \
+  shap \
+  jupyter \
+  ipykernel \
+  -y
+python -m pip install \
+  ydata-profiling \
+  langchain-ollama \
+  lime \
+  treeinterpreter
+python -m ipykernel install --user --name RestingHeartRate --display-name "Python (RestingHeartRate)"
