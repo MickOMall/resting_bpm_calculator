@@ -16,7 +16,7 @@ The system is built with a **Random Forest Regressor**, a **Streamlit** web inte
 
 ## System Design
 - **Data Processing:** One-hot encoding for categorical variables, normalization of numeric features.  
-- **Machine Learning Model:** Random Forest Regressor trained on tabular health data, evaluated via R², MAE, and MAPE.  
+- **Model:** Random Forest Regressor trained on tabular health data, evaluated via R², MAE, and MAPE.  
 - **Explainability:** CrewAI interprets feature contributions and generates human-readable explanations.  
 - **Web App:** Streamlit interface for input, prediction, visualization, and feedback submission.  
 
