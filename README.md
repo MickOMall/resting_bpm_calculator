@@ -32,5 +32,6 @@ The system is built with a **Random Forest Regressor**, a **Streamlit** web inte
 
 ## Use instructions :
 1. Download the zip.
-2. Run all cells in model.ipynb to get the model.
-3. Go to app.py's directory and run "streamlit run app.py"
+2. Run the code in Requirements.txt
+3. Run all cells in model.ipynb to get the model.
+4. Go to app.py's directory and run "streamlit run app.py"
